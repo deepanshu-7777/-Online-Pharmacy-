@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products - HealthyLife</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script>
+    // JavaScript function to handle adding items to the cart
+    function addToCart(productId, productName, price) {
+      const quantityInput = document.getElementById(`quantity-${productId}`);
+      const quantity = parseInt(quantityInput.value);
+
+      if (quantity > 0) {
+        // Get the existing cart from localStorage or initialize a new one
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        // Check if the product is already in the cart
+        const existingProduct = cart.find(item => item.id === productId);
+
+        if (existingProduct) {
+          // Update the quantity if the product already exists in the cart
+          existingProduct.quantity += quantity;
+        } else {
+          // Add the new product to the cart
+          cart.push({ id: productId, name: productName, price: price, quantity: quantity });
+        }
+
+        // Save the updated cart back to localStorage
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        alert(`${quantity} x ${productName} has been added to your cart.`);
+        quantityInput.value = 0; // Reset the quantity input
+      } else {
+        alert('Please select a quantity greater than 0.');
+      }
+    }
+
+    // JavaScript function to handle quantity changes
+    function updateQuantity(productId, change) {
+      const quantityInput = document.getElementById(`quantity-${productId}`);
+      let currentQuantity = parseInt(quantityInput.value);
+
+      // Update quantity based on the change (+1 or -1)
+      currentQuantity += change;
+
+      // Ensure quantity doesn't go below 0
+      if (currentQuantity < 0) {
+        currentQuantity = 0;
+      }
+
+      quantityInput.value = currentQuantity;
+    }
+  </script>
+  <style>
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-controls button {
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .quantity-controls input {
+      width: 50px;
+      text-align: center;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Our Products</h1>
+    <p>Explore our wide range of medicines</p>
+  </header>
+
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="products.html">Products</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <section class="products">
+    <div class="product-grid">
+      <!-- Product 1 -->
+      <div class="product-card">
+        <img src="https://www.lxir.in/wp-content/uploads/2019/02/28.png" alt="Paracetamol" />
+        <h3>Paracetamol 500mg</h3>
+        <p>Price: $5</p>
+        <div class="quantity-controls">
+          <button onclick="updateQuantity('paracetamol', -1)">-</button>
+          <input type="number" id="quantity-paracetamol" value="0" min="0" />
+          <button onclick="updateQuantity('paracetamol', 1)">+</button>
+        </div>
+        <button onclick="addToCart('paracetamol', 'Paracetamol 500mg', 5)">Add to Cart</button>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="product-card">
+        <img src="https://m.media-amazon.com/images/I/61Q-+KR3WcL.jpg" alt="Vitamin C" />
+        <h3>Vitamin C Tablets</h3>
+        <p>Price: $10</p>
+        <div class="quantity-controls">
+          <button onclick="updateQuantity('vitamin-c', -1)">-</button>
+          <input type="number" id="quantity-vitamin-c" value="0" min="0" />
+          <button onclick="updateQuantity('vitamin-c', 1)">+</button>
+        </div>
+        <button onclick="addToCart('vitamin-c', 'Vitamin C Tablets', 10)">Add to Cart</button>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="product-card">
+        <img src="https://images.apollo247.in/pub/media/catalog/product/b/e/ben0006_2.jpg?tr=q-80,f-webp,w-400,dpr-3,c-at_max%201200w" alt="Cough Syrup" />
+        <h3>Cough Syrup</h3>
+        <p>Price: $7</p>
+        <div class="quantity-controls">
+          <button onclick="updateQuantity('cough-syrup', -1)">-</button>
+          <input type="number" id="quantity-cough-syrup" value="0" min="0" />
+          <button onclick="updateQuantity('cough-syrup', 1)">+</button>
+        </div>
+        <button onclick="addToCart('cough-syrup', 'Cough Syrup', 7)">Add to Cart</button>
+      </div>
+      <!-- Product 4 -->
+      <div class="product-card">
+        <img src="C:\html\website\LOP0001_3_1.webp" alt="loparamide" />
+        <h3>Vitamin C Tablets</h3>
+        <p>Price: $10</p>
+        <div class="quantity-controls">
+          <button onclick="updateQuantity('vitamin-c', -1)">-</button>
+          <input type="number" id="quantity-vitamin-c" value="0" min="0" />
+          <button onclick="updateQuantity('vitamin-c', 1)">+</button>
+        </div>
+        <button onclick="addToCart('vitamin-c', 'Vitamin C Tablets', 10)">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 HealthyLife Medical Store
+  </footer>
+
+</body>
+</html>
