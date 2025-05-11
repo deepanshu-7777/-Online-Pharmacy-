@@ -1,0 +1,130 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4fcfe; 
+  color: #333;
+}
+
+header {
+  background-color: #00bcd4; 
+  color: white;
+  padding: 2rem 1rem;
+  text-align: center;
+  background-image: url('C:/html/website/aa.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
+  background-color: rgba(0, 188, 212, 0.6); 
+}
+
+nav {
+  background-color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+nav a {
+  display: inline-block;
+  color: #00bcd4;
+  padding: 14px 20px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+nav a:hover {
+  background-color: #00bcd4;
+  color: white;
+  border-radius: 4px;
+}
+
+.banner {
+  padding: 1rem;
+  background-color: #e0f7fa;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #007c91;
+  margin-bottom: 1rem;
+}
+
+.products {
+  padding: 2rem 1rem;
+}
+
+.product-grid {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.product-card {
+  background: white;
+  border: none;
+  border-radius: 16px;
+  padding: 1.5rem 1rem;
+  width: 260px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.product-card button {
+  margin-top: 0.5rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.product-card button:hover {
+  background-color: #388e3c;
+}
+
+.contact,
+.cart {
+  background: #ffffff;
+  padding: 1.5rem;
+  margin: 2rem auto;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  max-width: 800px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.cart ul {
+  list-style: none;
+  padding: 0;
+}
+
+.cart li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+footer {
+  background-color: #00796b; 
+  color: white;
+  text-align: center;
+  padding: 1.2rem;
+  font-size: 0.95rem;
+  margin-top: 2rem;
+}

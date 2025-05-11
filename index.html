@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harish Medical General Store</title>
+  <link rel="stylesheet" href="styles.css" />
+ 
+ 
+</head>
+<body>
+
+  <header>
+    <h1>Harish Medical General Store</h1>
+    <p>Your trusted pharmacy</p>
+  </header>
+
+  <nav>
+    
+    <a href="index.html">Home</a>
+    <a href="welcome.html">welcome</a>
+    <a href="products.html">Products</a>
+    <a href="about.html">About Us</a>
+    <a href="contact.html">Contact</a>
+    
+  </nav>
+
+  <div class="banner">
+    Welcome to Harish Medical General Store
+  </div>
+
+  <section class="products">
+    <h2>Our Best Sellers</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="https://www.lxir.in/wp-content/uploads/2019/02/28.png" alt="Paracetamol" />
+        <h3>Paracetamol 500mg</h3>
+        <p>Price: $5</p>
+        <button onclick="addToCart('Paracetamol 500mg', 5)">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="https://m.media-amazon.com/images/I/61Q-+KR3WcL.jpg" alt="Vitamin C" />
+        <h3>Vitamin C Tablets</h3>
+        <p>Price: $10</p>
+        <button onclick="addToCart('Vitamin C Tablets', 10)">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="https://images.apollo247.in/pub/media/catalog/product/b/e/ben0006_2.jpg?tr=q-80,f-webp,w-400,dpr-3,c-at_max%201200w" alt="Cough Syrup" />
+        <h3>Cough Syrup</h3>
+        <p>Price: $7</p>
+        <button onclick="addToCart('Cough Syrup', 7)">Add to Cart</button>
+      </div>
+      <div class="product-card">
+        <img src="C:\html\website\tramadol-INJECTION..jpg" alt="Tramadol INJECTION" />
+        <h3>Tramadol INJECTION</h3>
+        <p>Price: $9</p>
+        <button onclick="addToCart('Tramadol INJECTION', 9)">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="cart">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <p><strong>Total:</strong> $<span id="cart-total">0</span></p>
+  </section>
+
+  <section class="contact">
+    <h2>Contact Us</h2>
+    <p>Email: support@healthylife.com</p>
+    <p>Phone: +1 234 567 890</p>
+    <p>Address: 123 Wellness Street, Health City</p>
+  </section>
+
+  
+
+  <footer>
+    &copy; 2025 Harish Medical General Store. All rights reserved.
+  </footer>
+
+  <script>
+    const cartItems = [];
+
+    function addToCart(name, price) {
+      cartItems.push({ name, price });
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartList = document.getElementById('cart-items');
+      const totalElement = document.getElementById('cart-total');
+      cartList.innerHTML = '';
+      let total = 0;
+
+      cartItems.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${item.name} - $${item.price}`;
+        cartList.appendChild(li);
+        total += item.price;
+      });
+
+      totalElement.textContent = total.toFixed(2);
+    }
+  </script>
+
+</body>
+</html>
