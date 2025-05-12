@@ -63,6 +63,7 @@
     <h2>Your Cart</h2>
     <ul id="cart-items"></ul>
     <p><strong>Total:</strong> $<span id="cart-total">0</span></p>
+    <button id="buy-button" onclick="placeOrder()">Buy</button>
   </section>
 
   <section class="contact">
@@ -100,6 +101,20 @@
       });
 
       totalElement.textContent = total.toFixed(2);
+    }
+
+    function placeOrder() {
+      if (cartItems.length === 0) {
+        alert('Your cart is empty. Please add items to your cart before placing an order.');
+        return;
+      }
+
+      const orderDetails = cartItems.map(item => `${item.name} - $${item.price}`).join('\n');
+      const total = cartItems.reduce((sum, item) => sum + item.price, 0).toFixed(2);
+
+      alert(`Order placed successfully!\n\nOrder Details:\n${orderDetails}\n\nTotal: $${total}`);
+      cartItems.length = 0; // Clear the cart
+      renderCart(); // Update the cart display
     }
   </script>
 
