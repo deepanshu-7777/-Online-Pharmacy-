@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Harish Medical General Store</title>
   <link rel="stylesheet" href="styles.css" />
- 
- 
 </head>
 <body>
 
@@ -16,13 +14,11 @@
   </header>
 
   <nav>
-    
     <a href="index.html">Home</a>
-    <a href="welcome.html">welcome</a>
+    <a href="welcome.html">Welcome</a>
     <a href="products.html">Products</a>
     <a href="about.html">About Us</a>
     <a href="contact.html">Contact</a>
-    
   </nav>
 
   <div class="banner">
@@ -38,20 +34,23 @@
         <p>Price: $5</p>
         <button onclick="addToCart('Paracetamol 500mg', 5)">Add to Cart</button>
       </div>
+
       <div class="product-card">
         <img src="https://m.media-amazon.com/images/I/61Q-+KR3WcL.jpg" alt="Vitamin C" />
         <h3>Vitamin C Tablets</h3>
         <p>Price: $10</p>
         <button onclick="addToCart('Vitamin C Tablets', 10)">Add to Cart</button>
       </div>
+
       <div class="product-card">
-        <img src="https://images.apollo247.in/pub/media/catalog/product/b/e/ben0006_2.jpg?tr=q-80,f-webp,w-400,dpr-3,c-at_max%201200w" alt="Cough Syrup" />
+        <img src="https://images.apollo247.in/pub/media/catalog/product/b/e/ben0006_2.jpg" alt="Cough Syrup" />
         <h3>Cough Syrup</h3>
         <p>Price: $7</p>
         <button onclick="addToCart('Cough Syrup', 7)">Add to Cart</button>
       </div>
+
       <div class="product-card">
-        <img src="C:\html\website\image\tramadol-INJECTION..jpg" alt="Tramadol INJECTION" />
+        <img src="images/tramadol-INJECTION.jpg" alt="Tramadol INJECTION" />
         <h3>Tramadol INJECTION</h3>
         <p>Price: $9</p>
         <button onclick="addToCart('Tramadol INJECTION', 9)">Add to Cart</button>
@@ -73,50 +72,10 @@
     <p>Address: 123 Wellness Street, Health City</p>
   </section>
 
-  
-
   <footer>
     &copy; 2025 Harish Medical General Store. All rights reserved.
   </footer>
 
-  <script>
-    const cartItems = [];
-
-    function addToCart(name, price) {
-      cartItems.push({ name, price });
-      renderCart();
-    }
-
-    function renderCart() {
-      const cartList = document.getElementById('cart-items');
-      const totalElement = document.getElementById('cart-total');
-      cartList.innerHTML = '';
-      let total = 0;
-
-      cartItems.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.textContent = `${item.name} - $${item.price}`;
-        cartList.appendChild(li);
-        total += item.price;
-      });
-
-      totalElement.textContent = total.toFixed(2);
-    }
-
-    function placeOrder() {
-      if (cartItems.length === 0) {
-        alert('Your cart is empty. Please add items to your cart before placing an order.');
-        return;
-      }
-
-      const orderDetails = cartItems.map(item => `${item.name} - $${item.price}`).join('\n');
-      const total = cartItems.reduce((sum, item) => sum + item.price, 0).toFixed(2);
-
-      alert(`Order placed successfully!\n\nOrder Details:\n${orderDetails}\n\nTotal: $${total}`);
-      cartItems.length = 0; // Clear the cart
-      renderCart(); // Update the cart display
-    }
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
