@@ -6,10 +6,6 @@ const stripe = require('stripe')('your-stripe-secret-key'); // Replace with your
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
-});
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/pharmacy', { useNewUrlParser: true, useUnifiedTopology: true });
@@ -30,17 +26,40 @@ const User = mongoose.model('User', new mongoose.Schema({
     message: String
 }));
 
-// API to get products by category
+// API Routes
 app.get('/api/products/:category', async (req, res) => {
-    const category = req.params.category;
-    const products = category === 'all' ? await Product.find() : await Product.find({ category: category });
-    res.json(products);
+    try {
+        const category = req.params.category;
+        const products = category === 'all' ? await Product.find() : await Product.find({ category: category });
+        res.json(products);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// API to get a single product by ID with related products
+app.get('/api/products/id/:id', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) return res.status(404).json({ error: 'Product not found' });
+        
+        // Fetch related products (same category, exclude current)
+        const related = await Product.find({ category: product.category, _id: { $ne: product._id } }).limit(4);
+        
+        res.json({ product, related });
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 app.post('/api/contact', async (req, res) => {
-    const user = new User(req.body);
-    await user.save();
-    res.sendStatus(200);
+    try {
+        const user = new User(req.body);
+        await user.save();
+        res.sendStatus(200);
+    } catch (err) {
+        res.status(500).json({ error: 'Server error' });
+    }
 });
 
 // Stripe Checkout
@@ -60,6 +79,14 @@ app.post('/create-checkout-session', async (req, res) => {
         cancel_url: 'http://localhost:3000/cancel',
     });
     res.json({ id: session.id });
+});
+
+// Static files (after all API routes)
+app.use(express.static('public'));
+
+// Root route
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
 });
 
 app.listen(3000, () => console.log('Server running on port 3000'));
