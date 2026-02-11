@@ -1,36 +1,51 @@
-// Smooth scrolling
+// Declare variables at the top to avoid reference errors
+let currentUser = null;
+let cart = []; // Always start as array
+let token = localStorage.getItem('token');
+
+// Smooth scrolling for navigation (fixed invalid selector issue)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
+        const target = this.getAttribute('href');
+        if (target && target !== '#') { // Ensure valid selector
+            const element = document.querySelector(target);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        }
     });
 });
 
 // Load products by category
 async function loadProducts(category = 'all') {
-    const response = await fetch(`/api/products/${category}`);
-    const products = await response.json();
-    const productList = document.getElementById('product-list');
-    productList.innerHTML = ''; // Clear previous products
-    products.forEach(product => {
-        const col = document.createElement('div');
-        col.className = 'col-md-4';
-        col.innerHTML = `
-            <div class="card">
-                <img src="${product.image}" class="card-img-top" alt="${product.name}">
-                <div class="card-body">
-                    <h5 class="card-title">${product.name}</h5>
-                    <p class="card-text">${product.description}</p>
-                    <p>$${product.price}</p>
-                    <button class="btn btn-secondary me-2" onclick="viewDetails('${product._id}')">View Details</button>
-                    <button class="btn btn-primary add-to-cart" data-id="${product._id}">Add to Cart</button>
+    try {
+        const response = await fetch(`/api/products/${category}`);
+        const products = await response.json();
+        const productList = document.getElementById('product-list');
+        productList.innerHTML = ''; // Clear previous products
+        products.forEach(product => {
+            const col = document.createElement('div');
+            col.className = 'col-md-4';
+            col.innerHTML = `
+                <div class="card">
+                    <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${product.name}</h5>
+                        <p class="card-text">${product.description}</p>
+                        <p>$${product.price}</p>
+                        <button class="btn btn-secondary me-2" onclick="viewDetails('${product._id}')">View Details</button>
+                        <button class="btn btn-primary add-to-cart" data-id="${product._id}">Add to Cart</button>
+                    </div>
                 </div>
-            </div>
-        `;
-        productList.appendChild(col);
-    });
+            `;
+            productList.appendChild(col);
+        });
+    } catch (err) {
+        console.error('Error loading products:', err);
+    }
 }
 
 // Event listeners for category buttons
@@ -97,52 +112,282 @@ if (window.location.pathname.includes('product.html')) {
     }
 }
 
-// Shopping cart with full details
-let cart = [];
+// Auth functions
+function updateAuthUI() {
+    if (currentUser) {
+        document.getElementById('auth-btn').classList.add('d-none');
+        document.getElementById('logout-btn').classList.remove('d-none');
+    } else {
+        document.getElementById('auth-btn').classList.remove('d-none');
+        document.getElementById('logout-btn').classList.add('d-none');
+    }
+}
 
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('add-to-cart')) {
-        const id = e.target.dataset.id;
-        const product = { id, name: e.target.closest('.card').querySelector('.card-title').textContent, price: parseFloat(e.target.previousElementSibling.textContent.replace('$', '')) };
-        cart.push(product);
-        updateCartCount();
+// Check token on page load
+window.addEventListener('DOMContentLoaded', function() {
+    token = localStorage.getItem('token');
+    
+    if (token) {
+        // Verify token on load
+        fetch('/api/auth/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error('Invalid token');
+            }
+        })
+        .then(user => {
+            currentUser = user;
+            updateAuthUI();
+            loadCart();
+        })
+        .catch(() => {
+            localStorage.removeItem('token');
+            token = null;
+            updateAuthUI();
+        });
+    } else {
+        updateAuthUI();
     }
 });
 
-function updateCartCount() {
-    document.getElementById('cart-count').textContent = cart.length;
+document.getElementById('auth-btn').addEventListener('click', () => {
+    new bootstrap.Modal(document.getElementById('authModal')).show();
+});
+
+// Login form
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+        localStorage.setItem('token', data.token);
+        token = data.token;
+        currentUser = data.user;
+        updateAuthUI();
+        await loadCart();
+        bootstrap.Modal.getInstance(document.getElementById('authModal')).hide();
+        alert('Logged in successfully!');
+    } else {
+        alert(data.error);
+    }
+});
+
+// Signup form
+document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password })
+    });
+    const data = await res.json();
+    if (res.ok) {
+        alert('Signed up successfully! Please login.');
+        document.getElementById('login-tab').click();
+    } else {
+        alert(data.error);
+    }
+});
+
+function logout() {
+    localStorage.removeItem('token');
+    currentUser = null;
+    cart = []; // Clear cart on logout
+    updateCartCount();
+    updateAuthUI();
+    location.reload(); // Refresh to reset UI
 }
 
-document.getElementById('cart-link').addEventListener('click', function() {
+// Load cart from DB if logged in
+async function loadCart() {
+    if (currentUser && token) {
+        console.log('Loading cart for user');
+        try {
+            const res = await fetch('/api/cart', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                cart = Array.isArray(data) ? data : [];
+                console.log('Cart loaded:', cart);
+                updateCartCount();
+            } else {
+                console.error('Failed to load cart:', res.status, res.statusText);
+                cart = [];
+            }
+        } catch (err) {
+            console.error('Error loading cart:', err);
+            cart = [];
+        }
+    }
+}
+
+// Add to cart (with persistence and notification)
+async function addToCart(productId) {
+    if (!Array.isArray(cart)) cart = [];
+    const existingItem = cart.find(item => item.productId._id === productId || item.productId === productId);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        const product = { productId, quantity: 1 };
+        cart.push(product);
+    }
+    updateCartCount();
+    showNotification('Item added to cart!');
+    if (currentUser) {
+        token = localStorage.getItem('token');
+        console.log('Saving cart for user');
+        try {
+            const res = await fetch('/api/cart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ productId, quantity: 1 })
+            });
+            if (!res.ok) {
+                console.error('Failed to save cart:', res.status, res.statusText);
+            } else {
+                console.log('Cart saved successfully');
+            }
+        } catch (err) {
+            console.error('Error saving to cart:', err);
+        }
+    }
+}
+
+// Show notification
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-success position-fixed';
+    notification.style.top = '10px';
+    notification.style.right = '10px';
+    notification.style.zIndex = '1050';
+    notification.innerHTML = message;
+    document.body.appendChild(notification);
+    setTimeout(() => {
+        notification.remove();
+    }, 3000); // Remove after 3 seconds
+}
+
+// Update cart count
+function updateCartCount() {
+    if (!Array.isArray(cart)) cart = [];
+    document.getElementById('cart-count').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+}
+
+// View cart modal with editing
+document.getElementById('cart-link').addEventListener('click', async () => {
     const cartItems = document.getElementById('cart-items');
-    if (cart.length === 0) {
+    if (!Array.isArray(cart) || cart.length === 0) {
         cartItems.innerHTML = '<p>Your cart is empty.</p>';
     } else {
         let html = '<ul class="list-group">';
         let total = 0;
-        cart.forEach((item, index) => {
-            html += `<li class="list-group-item d-flex justify-content-between align-items-center">
-                ${item.name} - $${item.price}
-                <button class="btn btn-danger btn-sm remove-item" data-index="${index}">Remove</button>
-            </li>`;
-            total += item.price;
-        });
+        for (const item of cart) {
+            let product = item.productId;
+            if (typeof product === 'string') {
+                try {
+                    const res = await fetch(`/api/products/id/${product}`);
+                    const data = await res.json();
+                    product = data.product;
+                } catch (err) {
+                    console.error('Error fetching product:', err);
+                    continue;
+                }
+            }
+            const itemTotal = product.price * item.quantity;
+            total += itemTotal;
+            html += `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>${product.name}</strong><br>
+                        $${product.price} x ${item.quantity} = $${itemTotal.toFixed(2)}
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-secondary me-1" onclick="changeQuantity('${product._id}', ${item.quantity - 1})">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="btn btn-sm btn-secondary ms-1" onclick="changeQuantity('${product._id}', ${item.quantity + 1})">+</button>
+                        <button class="btn btn-danger btn-sm ms-2" onclick="removeFromCart('${product._id}')">Remove</button>
+                    </div>
+                </li>
+            `;
+        }
         html += `</ul><p class="mt-3"><strong>Total: $${total.toFixed(2)}</strong></p>`;
         cartItems.innerHTML = html;
     }
     new bootstrap.Modal(document.getElementById('cartModal')).show();
 });
 
-// Remove item from cart
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('remove-item')) {
-        const index = e.target.dataset.index;
-        cart.splice(index, 1);
-        updateCartCount();
-        document.getElementById('cart-link').click(); // Refresh modal
+// Change quantity
+async function changeQuantity(productId, newQuantity) {
+    if (!Array.isArray(cart)) cart = [];
+    if (newQuantity <= 0) {
+        removeFromCart(productId);
+        return;
     }
-});
+    const item = cart.find(item => item.productId._id === productId || item.productId === productId);
+    if (item) item.quantity = newQuantity;
+    updateCartCount();
+    console.log(`Quantity changed for product ${productId} to ${newQuantity}`);
+    if (currentUser) {
+        token = localStorage.getItem('token');
+        console.log('Updating cart quantity on server');
+        try {
+            const res = await fetch(`/api/cart/${productId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ quantity: newQuantity })
+            });
+            if (!res.ok) {
+                console.error('Failed to update cart quantity:', res.status, res.statusText);
+            } else {
+                console.log('Cart quantity updated successfully');
+            }
+        } catch (err) {
+            console.error('Error updating cart:', err);
+        }
+    }
+    document.getElementById('cart-link').click(); // Refresh modal
+}
 
+// Remove from cart
+async function removeFromCart(productId) {
+    if (!Array.isArray(cart)) cart = [];
+    cart = cart.filter(item => item.productId._id !== productId && item.productId !== productId);
+    updateCartCount();
+    console.log(`Item ${productId} removed from cart`);
+    showNotification('Item removed from cart!');
+    if (currentUser) {
+        token = localStorage.getItem('token');
+        console.log('Removing item from cart on server');
+        try {
+            const res = await fetch(`/api/cart/${productId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!res.ok) {
+                console.error('Failed to remove item from cart:', res.status, res.statusText);
+            } else {
+                console.log('Item removed from cart successfully');
+            }
+        } catch (err) {
+            console.error('Error removing from cart:', err);
+        }
+    }
+    document.getElementById('cart-link').click(); // Refresh modal
+}
 
 // Stripe checkout
 const stripe = Stripe('your-stripe-public-key'); // Replace with your key
@@ -172,4 +417,12 @@ document.getElementById('contactForm').addEventListener('submit', async function
     alert('Message sent!');
 });
 
+// Load all products on page load
 loadProducts();
+
+// Add to cart event listener
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('add-to-cart')) {
+        addToCart(e.target.dataset.id);
+    }
+});
