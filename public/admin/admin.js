@@ -1,3 +1,4 @@
+let editId = null;
 const form = document.getElementById("productForm");
 
 form.addEventListener("submit",async(e)=>{
@@ -94,9 +95,37 @@ loadProducts();
 
 async function editProduct(id){
 
-const newPrice=prompt("Enter new price");
+editId = id;
 
-await fetch("/api/admin/update-product/"+id,{
+const res = await fetch("/api/admin/products");
+const products = await res.json();
+
+const product = products.find(p => p._id === id);
+
+document.getElementById("editName").value = product.name;
+document.getElementById("editDesc").value = product.description;
+document.getElementById("editPrice").value = product.price;
+document.getElementById("editStock").value = product.stock;
+document.getElementById("editCategory").value = product.category;
+document.getElementById("editImage").value = product.image;
+
+document.getElementById("editModal").style.display = "flex";
+
+}
+async function updateProduct(){
+
+const updatedProduct = {
+
+name: document.getElementById("editName").value,
+description: document.getElementById("editDesc").value,
+price: document.getElementById("editPrice").value,
+stock: document.getElementById("editStock").value,
+category: document.getElementById("editCategory").value,
+image: document.getElementById("editImage").value
+
+};
+
+await fetch("/api/admin/update-product/" + editId, {
 
 method:"PUT",
 
@@ -104,10 +133,15 @@ headers:{
 "Content-Type":"application/json"
 },
 
-body:JSON.stringify({price:newPrice})
+body:JSON.stringify(updatedProduct)
 
 });
 
+closeModal();
+
 loadProducts();
 
+}
+function closeModal(){
+document.getElementById("editModal").style.display="none";
 }
