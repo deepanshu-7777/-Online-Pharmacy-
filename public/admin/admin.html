@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Seller Dashboard</title>
+
+<link rel="stylesheet" href="admin.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<h1>Pharmacy Seller Dashboard</h1>
+
+<div class="add-section">
+
+<h2>Add Medicine</h2>
+
+<form id="productForm">
+
+<input type="text" id="name" placeholder="Medicine Name" required>
+
+<input type="text" id="desc" placeholder="Description">
+
+<input type="number" id="price" placeholder="Price">
+
+<input type="number" id="stock" placeholder="Stock">
+
+<input type="text" id="category" placeholder="Category">
+
+<input type="text" id="image" placeholder="Image URL">
+
+<button type="submit">Add Product</button>
+
+</form>
+
+</div>
+
+
+<div class="inventory-section">
+
+<h2>Inventory</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Image</th>
+<th>Name</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Category</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="productTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- Edit modal -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <h2>Edit Medicine</h2>
+
+    <input type="text" id="editName" placeholder="Medicine Name">
+    <input type="text" id="editDesc" placeholder="Description">
+    <input type="number" id="editPrice" placeholder="Price">
+    <input type="number" id="editStock" placeholder="Stock">
+    <input type="text" id="editCategory" placeholder="Category">
+    <input type="text" id="editImage" placeholder="Image URL">
+
+    <button onclick="updateProduct()">Update</button>
+    <button onclick="closeModal()">Cancel</button>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+
+</body>
+
+</html>

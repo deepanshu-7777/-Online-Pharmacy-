@@ -8,25 +8,18 @@ app.use(cors());
 app.use(express.json());
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const JWT_SECRET = 'your-secret-key'; // Change to a strong secret in production
-
-// Middleware to verify JWT
-const authenticateToken = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
-    if (!token) return res.sendStatus(401);
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403);
-        req.user = user;
-        next();
-    });
-};
+const { authenticateToken, JWT_SECRET } = require('./middleware/auth');
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/pharmacy', { useNewUrlParser: true, useUnifiedTopology: true });
 
+const adminRoutes = require("./routes/admin");
+
+app.use("/api/admin", adminRoutes);
 // Require models
 const Product = require('./Models/Product');
 const User = require('./Models/User');
+
 
 // API Routes
 app.get('/api/products/:category', async (req, res) => {
@@ -234,5 +227,7 @@ app.delete('/api/cart/:productId', authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+app.use("/api/admin", adminRoutes);
 
 app.listen(3000, () => console.log('Server running on port 3000'));

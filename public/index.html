@@ -10,11 +10,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary" role="navigation" aria-label="Main navigation">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" role="navigation" aria-label="Main navigation">
         <div class="container">
-            <a class="navbar-brand" href="#home">Harish Medical and General Store</a>
+            <a class="navbar-brand" href="#home">
+                <span class="me-2">💊</span>Harish Medical
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -25,7 +28,7 @@
                     <li class="nav-item"><a class="nav-link" href="#products">Products</a></li>
                     <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#" id="cart-link">Cart (<span id="cart-count">0</span>)</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="cart-link">🛒 Cart (<span id="cart-count">0</span>)</a></li>
                     <li class="nav-item">
                         <button class="btn btn-outline-light" id="auth-btn">Login</button>
                     </li>
@@ -41,15 +44,56 @@
         <div class="container text-center">
             <h1>Welcome to Harish Medical and General Store</h1>
             <p>Your trusted source for medicines, health products, and general store items.</p>
-            <img src="image/banner.png" alt="Harish Medical and General Store Logo" class="img-fluid mb-3" style="max-width: 1100px;">
+            <img src="image/banner.png" alt="Harish Medical and General Store Banner" class="img-fluid mb-3" style="max-width: 1100px;">
         </div>
     </section>
+    <section class="trust-section">
+<div class="trust-box">
+
+<div class="trust-item">
+💊 Genuine Medicines
+</div>
+
+<div class="trust-item">
+🚚 Fast Delivery
+</div>
+
+<div class="trust-item">
+👨‍⚕️ Verified Pharmacists
+</div>
+
+<div class="trust-item">
+🔒 Secure Payment
+</div>
+
+</div>
+</section>
 
     <section id="about" class="py-5" role="region" aria-labelledby="about-heading">
         <div class="container">
             <h2 id="about-heading">About Us</h2>
-            <p>Established in 1997, Harish Medical and General Store has been serving the community with quality medicines and everyday essentials. We are committed to your health and well-being.</p>
-            <p>Our licensed pharmacists provide expert advice and ensure safe dispensing of medications.</p>
+            <div class="row">
+                <div class="col-lg-8">
+                    <p>Established in 1997, Harish Medical and General Store has been serving the community with quality medicines and everyday essentials. We are committed to your health and well-being.</p>
+                    <p>Our licensed pharmacists provide expert advice and ensure safe dispensing of medications.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="stats-container">
+                        <div class="stat-card">
+                            <h3>25+</h3>
+                            <p>Years Experience</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>10K+</h3>
+                            Customers</p>
+                        </div>
+ <p>Happy                        <div class="stat-card">
+                            <h3>500+</h3>
+                            <p>Products</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -78,35 +122,47 @@
                 <li>Health screenings and vaccinations</li>
                 <li>Delivery of medicines</li>
                 <li>General store shopping</li>
+                <li>24/7 Emergency pharmacy services</li>
+                <li>Free health consultations</li>
             </ul>
         </div>
     </section>
 
     <section id="contact" class="bg-light py-5" role="region" aria-labelledby="contact-heading">
         <div class="container">
-            <h2 id="contact-heading">Contact Us</h2>
-            <p>Address: NIWAZ NAGAR, NARNAUL,123001, HARYANA,</p>
-            <p>Phone: 99999999</p>
-            <p>Email: BVGDGAFAGJH@GMAIL.COM</p>
-            <form id="contactForm" role="form" aria-labelledby="contact-heading">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" required aria-required="true">
+            <div class="row">
+                <div class="col-lg-5">
+                    <h2 id="contact-heading">Contact Us</h2>
+                    <div class="contact-info">
+                        <p>📍 NIWAZ NAGAR, NARNAUL, 123001, HARYANA</p>
+                        <p>📞 +91 99999999</p>
+                        <p>✉️ BVGDGAFAGJH@GMAIL.COM</p>
+                        <p>🕐 Mon - Sat: 8:00 AM - 9:00 PM</p>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" required aria-required="true">
+                <div class="col-lg-7">
+                    <form id="contactForm" role="form" aria-labelledby="contact-heading">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name" required aria-required="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email" required aria-required="true">
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea class="form-control" id="message" rows="4" placeholder="How can we help you?" required aria-required="true"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="message" class="form-label">Message</label>
-                    <textarea class="form-control" id="message" rows="3" required aria-required="true"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Send Message</button>
-            </form>
+            </div>
         </div>
     </section>
 
     <!-- Shopping Cart Modal -->
+     <span class="medicine-badge">Best Seller</span>
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -180,7 +236,10 @@
 </div>
 
     <footer class="bg-primary text-white text-center py-3" role="contentinfo">
-        <p>&copy; 2023 Harish Medical and General Store. All rights reserved.</p>
+        <div class="container">
+            <p>&copy; 2023 Harish Medical and General Store. All rights reserved.</p>
+            <p class="small mb-0">Made with ❤️ for your health and wellness</p>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

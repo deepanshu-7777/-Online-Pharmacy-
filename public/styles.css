@@ -1,25 +1,486 @@
-body {
-    font-family: Arial, sans-serif;
+/* =========================
+   GLOBAL SETTINGS
+========================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
-.hero {
-    background-image: url('image\banner.png');
-    background-size: cover;
-    color: rgb(68, 112, 162);
-}
-.list-group-item {
-    border: 1px solid #ddd;
+body{
+font-family:'Poppins',sans-serif;
+background:#f5f7fb;
+color:#1e293b;
+line-height:1.6;
 }
 
-.card {
-    margin-bottom: 20px;
+html{
+scroll-behavior:smooth;
 }
 
-footer {
-    margin-top: 20px;
+/* =========================
+   COLOR VARIABLES
+========================= */
+
+:root{
+
+--primary:#0d9488;
+--primary-dark:#0f766e;
+--accent:#f97316;
+--text:#1e293b;
+--light:#f8fafc;
+--gray:#64748b;
+
 }
 
-/* Accessibility: High contrast for focus */
-.navbar-nav .nav-link:focus {
-    outline: 2px solid #fff;
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+background:linear-gradient(120deg,#0d9488,#14b8a6);
+padding:14px 0;
+box-shadow:0 5px 20px rgba(0,0,0,0.15);
+}
+
+.navbar-brand{
+font-size:22px;
+font-weight:700;
+color:white !important;
+}
+
+.navbar-nav .nav-link{
+
+color:white !important;
+font-weight:500;
+margin:0 8px;
+transition:0.3s;
+
+}
+
+.navbar-nav .nav-link:hover{
+
+color:#ffe4c7 !important;
+transform:translateY(-2px);
+
+}
+
+#cart-link{
+
+background:rgba(255,255,255,0.2);
+padding:6px 14px;
+border-radius:25px;
+
+}
+
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero{
+
+min-height:80vh;
+display:flex;
+align-items:center;
+justify-content:center;
+
+background:
+linear-gradient(120deg,#0d9488,#14b8a6,#0f766e);
+
+background-size:300% 300%;
+
+animation:gradientMove 8s infinite;
+
+color:white;
+text-align:center;
+
+}
+
+@keyframes gradientMove{
+
+0%{background-position:0% 50%}
+50%{background-position:100% 50%}
+100%{background-position:0% 50%}
+
+}
+
+.hero h1{
+
+font-size:3rem;
+font-weight:800;
+margin-bottom:15px;
+
+}
+
+.hero p{
+
+font-size:1.2rem;
+opacity:0.9;
+
+}
+
+.hero img{
+
+max-width:100%;
+border-radius:16px;
+box-shadow:0 10px 40px rgba(0,0,0,0.3);
+
+}
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+section h2{
+
+font-size:32px;
+color:var(--primary);
+font-weight:700;
+margin-bottom:30px;
+position:relative;
+
+}
+
+section h2::after{
+
+content:'';
+width:60px;
+height:4px;
+background:var(--accent);
+display:block;
+margin-top:6px;
+
+}
+
+/* =========================
+   ABOUT SECTION
+========================= */
+
+#about{
+
+background:white;
+padding:80px 0;
+
+}
+
+#about p{
+
+color:var(--gray);
+font-size:17px;
+
+}
+
+.stat-card{
+
+background:linear-gradient(120deg,#0d9488,#0f766e);
+color:white;
+padding:30px;
+border-radius:12px;
+text-align:center;
+margin:15px 0;
+box-shadow:0 10px 25px rgba(0,0,0,0.15);
+transition:0.3s;
+
+}
+
+.stat-card:hover{
+
+transform:translateY(-6px);
+
+}
+
+.stat-card h3{
+
+font-size:32px;
+font-weight:700;
+
+}
+
+/* =========================
+   PRODUCT SECTION
+========================= */
+
+#products{
+
+padding:80px 0;
+background:#f1f5f9;
+
+}
+
+/* CATEGORY BUTTONS */
+
+.category-btn{
+
+border:2px solid var(--primary);
+color:var(--primary);
+padding:8px 18px;
+border-radius:30px;
+margin:5px;
+font-weight:600;
+transition:0.3s;
+
+}
+
+.category-btn:hover{
+
+background:var(--primary);
+color:white;
+transform:translateY(-2px);
+
+}
+
+.category-btn.active{
+
+background:var(--primary);
+color:white;
+
+}
+
+/* PRODUCT CARD */
+
+.card{
+
+border:none;
+border-radius:18px;
+overflow:hidden;
+background:white;
+box-shadow:0 8px 25px rgba(0,0,0,0.1);
+transition:0.4s;
+
+}
+
+.card:hover{
+
+transform:translateY(-12px);
+box-shadow:0 20px 45px rgba(0,0,0,0.2);
+
+}
+
+.card-img-top{
+
+height:200px;
+object-fit:contain;
+padding:20px;
+background:#f8fafc;
+
+}
+
+.card-body{
+
+padding:20px;
+
+}
+
+.card-title{
+
+font-size:18px;
+font-weight:600;
+margin-bottom:5px;
+
+}
+
+.card-text{
+
+font-size:14px;
+color:var(--gray);
+
+}
+
+.card p{
+
+font-size:22px;
+color:var(--primary);
+font-weight:700;
+
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn-primary{
+
+background:var(--primary);
+border:none;
+border-radius:8px;
+padding:10px 20px;
+font-weight:600;
+transition:0.3s;
+
+}
+
+.btn-primary:hover{
+
+background:var(--primary-dark);
+transform:translateY(-2px);
+
+}
+
+.btn-secondary{
+
+background:#e2e8f0;
+border:none;
+
+}
+
+/* =========================
+   SERVICES SECTION
+========================= */
+
+#services{
+
+background:white;
+padding:80px 0;
+
+}
+
+#services ul{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+list-style:none;
+
+}
+
+#services li{
+
+background:#f8fafc;
+padding:25px;
+border-radius:12px;
+box-shadow:0 6px 20px rgba(0,0,0,0.08);
+transition:0.3s;
+
+}
+
+#services li:hover{
+
+transform:translateY(-5px);
+background:#0d9488;
+color:white;
+
+}
+
+/* =========================
+   CONTACT
+========================= */
+
+#contact{
+
+padding:80px 0;
+background:#f1f5f9;
+
+}
+
+.contact-info{
+
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.1);
+
+}
+
+.contact-info p{
+
+margin-bottom:10px;
+
+}
+
+.form-control{
+
+border-radius:8px;
+border:2px solid #e2e8f0;
+padding:10px;
+
+}
+
+.form-control:focus{
+
+border-color:var(--primary);
+box-shadow:none;
+
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+
+background:#0f172a;
+color:#cbd5e1;
+padding:40px 0;
+text-align:center;
+
+}
+
+footer a{
+
+color:#94a3b8;
+
+}
+
+footer a:hover{
+
+color:white;
+
+}
+
+/* =========================
+   FLOATING BUTTON
+========================= */
+
+.floating-cart{
+
+position:fixed;
+bottom:30px;
+right:30px;
+
+background:var(--primary);
+color:white;
+
+width:60px;
+height:60px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:50%;
+font-size:22px;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+.floating-cart:hover{
+
+transform:scale(1.1);
+
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+.hero h1{
+
+font-size:2.2rem;
+
+}
+
+section h2{
+
+font-size:26px;
+
+}
+
 }
